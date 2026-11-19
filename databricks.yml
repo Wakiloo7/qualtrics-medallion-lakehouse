@@ -7,6 +7,12 @@ include:
 variables:
   catalog:
     default: workspace
+  landing_path:
+    default: /Volumes/workspace/bronze/raw_landing/qualtrics/responses/
+  checkpoint_path:
+    default: /Volumes/workspace/bronze/checkpoints/qualtrics_responses/
+  metadata_path:
+    default: /Volumes/workspace/bronze/raw_landing/qualtrics/metadata/dataset_metadata.json
 
 targets:
   dev:
@@ -16,3 +22,6 @@ targets:
     mode: production
     variables:
       catalog: prod_qualtrics
+      landing_path: s3://qualtrics-prod-landing/responses/
+      checkpoint_path: s3://qualtrics-prod-landing/checkpoints/qualtrics_responses/
+      metadata_path: s3://qualtrics-prod-landing/metadata/dataset_metadata.json

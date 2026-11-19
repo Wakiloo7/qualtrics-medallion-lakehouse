@@ -56,7 +56,11 @@ resources:
         - name: catalog_name
           default: ${var.catalog}
         - name: landing_path
-          default: /Volumes/workspace/bronze/raw_landing/qualtrics/responses/
+          default: ${var.landing_path}
+        - name: checkpoint_path
+          default: ${var.checkpoint_path}
+        - name: metadata_path
+          default: ${var.metadata_path}
       email_notifications:
         no_alert_for_skipped_runs: false
       environments:
