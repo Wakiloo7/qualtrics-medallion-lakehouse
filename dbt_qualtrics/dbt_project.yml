@@ -1,0 +1,10 @@
+name: 'dbt_qualtrics'
+version: '1.0.0'
+config-version: 2
+profile: 'default'
+
+model-paths: ["models"]
+
+models:
+  dbt_qualtrics:
+    +materialized: table

@@ -1,0 +1,8 @@
+version: 2
+
+sources:
+  - name: silver
+    catalog: workspace
+    schema: silver
+    tables:
+      - name: qualtrics_responses

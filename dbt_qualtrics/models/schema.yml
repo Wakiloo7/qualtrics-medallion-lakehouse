@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: fact_survey_responses_dbt
+    description: "Validated Gold fact table for Qualtrics survey responses"
+    columns:
+      - name: survey_response_key
+        tests:
+          - unique
+          - not_null
+      - name: response_id
+        tests:
+          - not_null
+      - name: survey_id
+        tests:
+          - not_null
+      - name: nps_bucket
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['Promoter (9-10)', 'Passive (7-8)', 'Detractor (1-6)', 'Not Scored']
