@@ -1,0 +1,73 @@
+resources:
+  jobs:
+    qualtrics_medallion_poc:
+      name: qualtrics_medallion_poc
+      tasks:
+        - task_key: bronze_ingest
+          disabled: false
+          email_notifications: {}
+          notebook_task:
+            notebook_path: ../qualtrics_poc/01_bronze_ingest.ipynb
+            source: WORKSPACE
+          run_if: ALL_SUCCESS
+          timeout_seconds: 0
+          webhook_notifications: {}
+        - task_key: silver_transform
+          depends_on:
+            - task_key: bronze_ingest
+          disabled: false
+          email_notifications: {}
+          notebook_task:
+            notebook_path: ../qualtrics_poc/02_silver_transform.ipynb
+            source: WORKSPACE
+          run_if: ALL_SUCCESS
+          timeout_seconds: 0
+          webhook_notifications: {}
+        - task_key: gold_star_schema
+          depends_on:
+            - task_key: silver_transform
+          disabled: false
+          email_notifications: {}
+          notebook_task:
+            notebook_path: ../qualtrics_poc/03_gold_star_schema.ipynb
+            source: WORKSPACE
+          run_if: ALL_SUCCESS
+          timeout_seconds: 0
+          webhook_notifications: {}
+        - task_key: dbt_gold_quality_gate
+          depends_on:
+            - task_key: gold_star_schema
+          dbt_task:
+            catalog: ${var.catalog}
+            commands:
+              - dbt deps
+              - dbt run
+              - dbt test
+            project_directory: ../dbt_qualtrics
+            schema: gold
+            source: WORKSPACE
+            warehouse_id: 33bc5109fe0a4f02
+          disabled: false
+          email_notifications: {}
+          environment_key: dbt-default
+          run_if: ALL_SUCCESS
+          timeout_seconds: 0
+      parameters:
+        - name: catalog_name
+          default: ${var.catalog}
+        - name: landing_path
+          default: /Volumes/workspace/bronze/raw_landing/qualtrics/responses/
+      email_notifications:
+        no_alert_for_skipped_runs: false
+      environments:
+        - environment_key: dbt-default
+          spec:
+            dependencies:
+              - dbt-databricks>=1.0.0,<2.0.0
+            environment_version: "6"
+      max_concurrent_runs: 1
+      performance_target: PERFORMANCE_OPTIMIZED
+      queue:
+        enabled: true
+      timeout_seconds: 0
+      webhook_notifications: {}

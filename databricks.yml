@@ -1,0 +1,18 @@
+bundle:
+  name: qualtrics-medallion-lakehouse
+
+include:
+  - resources/*.yml
+
+variables:
+  catalog:
+    default: workspace
+
+targets:
+  dev:
+    mode: development
+    default: true
+  prod:
+    mode: production
+    variables:
+      catalog: prod_qualtrics
